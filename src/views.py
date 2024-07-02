@@ -17,9 +17,17 @@ def get_current_month_data(df: pd.DataFrame, date: str) -> pd.DataFrame:
     return df
 
 
+def filtered_card_data(df: pd.DataFrame) -> pd.DataFrame:
+    """ Возвращает сумму операций и кешбека по картам """
+
+    df = df.groupby(by="Номер карты").agg("Сумма операции").sum()
+    print(df)
+
 
 
 
 if __name__ in "__main__":
-    get_current_month_data(get_transactions_from_xls(Path.cwd().parent.joinpath("data", "operations.xls")), "20.07.2020")
+    file_path = Path.cwd().parent.joinpath("data", "operations.xls")
+    df = get_current_month_data(get_transactions_from_xls(file_path), "20.07.2020")
+    filtered_card_data(df)
 
