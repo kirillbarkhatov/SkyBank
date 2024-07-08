@@ -53,6 +53,6 @@ def currency_converter(amount: float, currency: str) -> float:
     return float(amount_rub)
 
 
-# print(currency_rate(["USD", "EUR", "RUB"]))
+# print(currency_rate(["USD", "EUR"]))
 #
 # print(stocks_rate(["AAPL", "AMZN", "GOOGL", "MSFT", "TSLA"]))

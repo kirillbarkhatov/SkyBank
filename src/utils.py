@@ -86,13 +86,19 @@ def date_converter(date: str) -> datetime:
     except Exception:
         pass
 
-
     raise Exception("Неверный формат даты")
 
 
+def get_user_settings(path: str = "user_settings.json") -> tuple:
+    """ Возвращает список валют и список акций из json с настройками пользователя"""
+
+    with open(path) as file:
+        user_settings = json.load(file)
+    return user_settings["user_currencies"], user_settings["user_stocks"]
 
 
 if __name__ in "__main__":
 #     get_transactions_from_csv(Path.cwd().parent.joinpath("data", "transactions.csv"))
     get_transactions_from_xls(Path.cwd().parent.joinpath("data", "operations.xls"))
     print(date_converter("2023-11"))
+    print(get_user_settings())
