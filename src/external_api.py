@@ -39,6 +39,20 @@ def stocks_rate(stocks: list) -> list[dict]:
     return stocks_rates
 
 
-# print(currency_rate(["USD", "EUR"]))
+def currency_converter(amount: float, currency: str) -> float:
+    """Функция обеспечивает обращение к внешнему API для получения текущего курса валют
+    и конвертации суммы операции в рубли
+    """
+
+    url = f"https://api.apilayer.com/exchangerates_data/latest?base={currency}"
+    response = requests.get(url, headers={"apikey": EXCHANGE_RATE_API_KEY})
+    if response.status_code != 200:
+        raise requests.RequestException
+    response_data = response.json()
+    amount_rub = round(amount * response_data["rates"]["RUB"], 2)
+    return float(amount_rub)
+
+
+print(currency_rate(["USD", "EUR", "RUB"]))
 #
 # print(stocks_rate(["AAPL", "AMZN", "GOOGL", "MSFT", "TSLA"]))
