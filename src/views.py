@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import datetime as dt
 from pathlib import Path
 
 from src.utils import get_transactions_from_xls, date_converter
@@ -42,8 +43,23 @@ def filtered_card_data(df: pd.DataFrame) -> list[dict]:
     return output_data
 
 
-def fitered_top_five_transactions():
-    pass
+def filtered_top_five_transactions(df: pd.DataFrame) -> list[dict]:
+    """ Возвращает топ-5 транзакций по сумме платежа"""
+
+    df = df.sort_values(by="Сумма платежа", ascending=False).iloc[:5].to_dict(orient="records")
+    print(df)
+    top_transactions = []
+    for transaction in df:
+        top_transactions.append(
+            {
+      "date": transaction["Дата операции"].date().strftime("%d.%m.%Y"),
+      "amount": transaction["Сумма платежа"],
+      "category": transaction["Категория"],
+      "description": transaction["Описание"]
+    }
+        )
+    print(top_transactions)
+    return top_transactions
 
 
 if __name__ in "__main__":
@@ -51,4 +67,5 @@ if __name__ in "__main__":
     # df = get_transactions_from_xls(file_path)
     df = get_current_month_data(get_transactions_from_xls(file_path), "20.07.2020")
     filtered_card_data(df)
+    filtered_top_five_transactions(df)
 

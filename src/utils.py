@@ -73,6 +73,13 @@ def date_converter(date: str) -> datetime:
         pass
 
     try:
+        date_dt = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+        return np.datetime64(date_dt)
+
+    except Exception:
+        pass
+
+    try:
         date_dt = datetime.datetime.strptime(date, "%Y-%m")
         return np.datetime64(date_dt)
 
