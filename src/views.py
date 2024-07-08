@@ -62,10 +62,25 @@ def filtered_top_five_transactions(df: pd.DataFrame) -> list[dict]:
     return top_transactions
 
 
+def get_greeting(date_time: str) -> str:
+    """ Возвращает приветствие в зависимости от времени суток"""
+
+    hour = dt.datetime.strptime(date_time,"%Y-%m-%d %H:%M:%S").hour
+    if hour >= 23 or hour < 4:
+        return "Доброй ночи"
+    if 4 <= hour < 12:
+        return "Доброе утро"
+    if 12 <= hour < 16:
+        return "Добрый день"
+    if 16 <= hour < 23:
+        return "Добрый вечер"
+
+
 if __name__ in "__main__":
     file_path = Path.cwd().parent.joinpath("data", "operations.xls")
     # df = get_transactions_from_xls(file_path)
     df = get_current_month_data(get_transactions_from_xls(file_path), "20.07.2020")
     filtered_card_data(df)
     filtered_top_five_transactions(df)
+    print(get_greeting("2021-01-20 13:00:00"))
 
