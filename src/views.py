@@ -1,10 +1,13 @@
+import json
+
 import pandas as pd
 import numpy as np
 import datetime as dt
 from pathlib import Path
 
-from src.utils import get_transactions_from_xls, date_converter
-from external_api import currency_rate
+from src.utils import get_transactions_from_xls, date_converter, get_user_settings
+from src.external_api import currency_rate, stocks_rate
+
 
 
 def get_current_month_data(df: pd.DataFrame, date: str) -> pd.DataFrame:
@@ -29,7 +32,6 @@ def filtered_card_data(df: pd.DataFrame) -> list[dict]:
     #     print(currency_rate_list)
 
     df = df.groupby(by="Номер карты").agg("Сумма платежа").sum().to_dict()
-    print(df)
     output_data = []
     for card_number, total_spent in df.items():
         output_data.append({
@@ -39,7 +41,6 @@ def filtered_card_data(df: pd.DataFrame) -> list[dict]:
         }
         )
 
-    print(output_data)
     return output_data
 
 
@@ -47,7 +48,6 @@ def filtered_top_five_transactions(df: pd.DataFrame) -> list[dict]:
     """ Возвращает топ-5 транзакций по сумме платежа"""
 
     df = df.sort_values(by="Сумма платежа", ascending=False).iloc[:5].to_dict(orient="records")
-    print(df)
     top_transactions = []
     for transaction in df:
         top_transactions.append(
@@ -58,7 +58,6 @@ def filtered_top_five_transactions(df: pd.DataFrame) -> list[dict]:
       "description": transaction["Описание"]
     }
         )
-    print(top_transactions)
     return top_transactions
 
 
@@ -76,11 +75,40 @@ def get_greeting(date_time: str) -> str:
         return "Добрый вечер"
 
 
-if __name__ in "__main__":
-    file_path = Path.cwd().parent.joinpath("data", "operations.xls")
-    # df = get_transactions_from_xls(file_path)
-    df = get_current_month_data(get_transactions_from_xls(file_path), "20.07.2020")
-    filtered_card_data(df)
-    filtered_top_five_transactions(df)
-    print(get_greeting("2021-01-20 13:00:00"))
+def get_main_page_data(date_time: str, user_currencies: list, user_stocks: list, file_path: str = "data/operations.xls") -> str:
+    """ Функция, для страницы Главная, возвращающая приветствие, данные по картам за этот месяц,
+    топ 5 операций за месяц, курсы валют и акций
+    """
 
+    greeting = get_greeting(date_time)
+    transactions = get_transactions_from_xls(file_path)
+    cards_data = filtered_card_data(transactions)
+    top_transactions = filtered_top_five_transactions(transactions)
+    currencies = currency_rate(user_currencies)
+    stocks = stocks_rate(user_stocks)
+
+    output_json = json.dumps(
+        {
+            "greeting": greeting,
+            "cards": cards_data,
+            "top_transactions": top_transactions,
+            "currency_rates": currencies,
+            "stock_prices": stocks
+        },
+        indent=4,
+        ensure_ascii=False
+    )
+
+    return output_json
+
+
+
+if __name__ in "__main__":
+    # file_path = Path.cwd().parent.joinpath("data", "operations.xls")
+    # # df = get_transactions_from_xls(file_path)
+    # df = get_current_month_data(get_transactions_from_xls(file_path), "20.07.2020")
+    # filtered_card_data(df)
+    # filtered_top_five_transactions(df)
+    # print(get_greeting("2021-01-20 13:00:00"))
+    user_currencies, user_stocks = get_user_settings()
+    print(get_main_page_data("2020-07-20 13:00:00", user_currencies, user_stocks))

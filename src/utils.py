@@ -22,8 +22,8 @@ def get_transactions_from_xls(file_path: str) -> pd.DataFrame:
     """
     try:
         transactions_df = pd.read_excel(file_path)
-        print(transactions_df.head())
-        print(transactions_df.info())
+        # print(transactions_df.head())
+        # print(transactions_df.info())
         # print(transactions_df.iloc[:5].to_dict(orient="list"))
         # # Приводим дату к формату "%Y-%m-%dT%H:%M:%S.%f" для совместимости с функцией convert_date из модуля widget.py
         # # transactions_df.date = transactions_df.date.str.replace("Z", ":000000")
@@ -44,8 +44,8 @@ def get_transactions_from_xls(file_path: str) -> pd.DataFrame:
 
         date_cols = ['Дата операции', 'Дата платежа']
         transactions_df[date_cols] = transactions_df[date_cols].astype("datetime64[ns]")
-        print(transactions_df.iloc[:3, :4])
-        print(transactions_df.info())
+        # print(transactions_df.iloc[:3, :4])
+        # print(transactions_df.info())
 
 
         return transactions_df
