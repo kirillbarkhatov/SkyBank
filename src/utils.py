@@ -16,7 +16,7 @@ from pathlib import Path
 # logger.addHandler(fh)
 
 
-def get_transactions_from_xls(file_path: str) -> pd.DataFrame:
+def get_transactions_from_xls(file_path: str = Path.cwd().parent.joinpath("data", "operations.xls")) -> pd.DataFrame:
     """Функция принимает на вход путь до CSV-файла и возвращает список словарей с данными о финансовых транзакциях.
     Если файл не найден, функция возвращает пустой список.
     """
@@ -42,10 +42,12 @@ def get_transactions_from_xls(file_path: str) -> pd.DataFrame:
         #     }
         # logger.info(f"Получен список транзакций из файла {file_path}")
 
-        date_cols = ['Дата операции', 'Дата платежа']
-        transactions_df[date_cols] = transactions_df[date_cols].astype("datetime64[ns]")
+        # date_cols = ['Дата операции', 'Дата платежа']
+        # transactions_df[date_cols] = transactions_df[date_cols].astype("datetime64[ns]")
+        transactions_df["Дата операции"] = pd.to_datetime(transactions_df["Дата операции"], format="%d.%m.%Y %H:%M:%S")
+        transactions_df["Дата платежа"] = pd.to_datetime(transactions_df["Дата платежа"], format="%d.%m.%Y")
         # print(transactions_df.iloc[:3, :4])
-        # print(transactions_df.info())
+        print(transactions_df.info())
 
 
         return transactions_df
@@ -99,6 +101,6 @@ def get_user_settings(path: str = "user_settings.json") -> tuple:
 
 if __name__ in "__main__":
 #     get_transactions_from_csv(Path.cwd().parent.joinpath("data", "transactions.csv"))
-    get_transactions_from_xls(Path.cwd().parent.joinpath("data", "operations.xls"))
+    get_transactions_from_xls()
     print(date_converter("2023-11"))
-    print(get_user_settings())
+    # print(get_user_settings())
