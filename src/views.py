@@ -1,5 +1,5 @@
 import json
-
+import logging
 import pandas as pd
 import numpy as np
 import datetime as dt
@@ -8,7 +8,13 @@ from pathlib import Path
 from src.utils import get_transactions_from_xls, date_converter, get_user_settings
 from src.external_api import currency_rate, stocks_rate
 
-
+# Настройки логгирования
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler(f"logs/{__name__}.log", mode="w")
+formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s: %(message)s")
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 def get_current_month_data(df: pd.DataFrame, date: str) -> pd.DataFrame:
     """Возвращает данные за текущий месяц. Если дата — 20.05.2020,
