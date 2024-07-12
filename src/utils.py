@@ -16,7 +16,7 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 
-def get_transactions_from_xls(file_path: str = Path.cwd().joinpath("data", "operations.xls")) -> pd.DataFrame | list:
+def get_transactions_from_xls(file_path: str = "data/operations.xls") -> pd.DataFrame | list:
     """Функция принимает на вход путь до CSV-файла и возвращает список словарей с данными о финансовых транзакциях.
     Если файл не найден, функция возвращает пустой список.
     """
