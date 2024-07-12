@@ -13,6 +13,7 @@ types-requests = "^2.32.0.20240622"
 pandas = "^2.2.2"
 xlrd = "^2.0.1"
 numpy = "^2.0.0"
+openpyxl = "^3.1.5"
 
 [tool.poetry.group.lint.dependencies]
 flake8 = "^7.1.0"

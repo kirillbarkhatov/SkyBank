@@ -4,6 +4,31 @@ from src.utils import get_transactions_from_xls, date_converter
 import datetime as dt
 import numpy as np
 
+
+from functools import wraps
+from typing import Any, Callable
+
+
+def save_report(filename: str | None = None) -> Callable:
+    """ Декоратор для записи отчета в файл """
+
+    def wrapper(func: Callable) -> Callable:
+
+        @wraps(func)
+        def inner(*args: Any, **kwargs: Any) -> Any:
+            if filename is None:
+                filename_to_save = func.__name__
+            else:
+                filename_to_save = filename
+            result = func(*args, **kwargs)
+            result.to_excel(f"{filename_to_save}.xlsx")
+            print(result)
+        return inner
+
+    return wrapper
+
+
+@save_report()
 def spending_by_category(transactions: pd.DataFrame,
                          category: str,
                          date: str = None) -> pd.DataFrame:
@@ -19,7 +44,7 @@ def spending_by_category(transactions: pd.DataFrame,
     # start_date = start_date.astype('M8[D]') + np.timedelta64(date64.day(), 'D')
     # print(date64.astype('M8[M]'))
     transactions_by_category = transactions.loc[(transactions['Дата операции'] <= end_date) & (transactions['Дата операции'] >= start_date) & (transactions['Категория'] == category)]
-    print(df)
+    return transactions_by_category
 
 
 
@@ -28,4 +53,5 @@ def spending_by_category(transactions: pd.DataFrame,
 
 if __name__ == "__main__":
     df = get_transactions_from_xls()
+
     spending_by_category(df,"Аптеки", "01.04.2020")
