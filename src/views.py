@@ -32,7 +32,7 @@ def get_current_month_data(transactions: pd.DataFrame, date: str) -> pd.DataFram
 
 
 def filtered_card_data(transactions: pd.DataFrame) -> list[dict]:
-    """Возвращает сумму операций и кешбека по картам"""
+    """Возвращает сумму расходов и кешбека по картам"""
 
     # Доделать конвертацию в дату операции - не факт, что нужно. Сумма платежа вроде должна помогать, но есть CNY
     # currency_list = list(set(df["Валюта операции"].to_list()))
@@ -41,11 +41,19 @@ def filtered_card_data(transactions: pd.DataFrame) -> list[dict]:
     #     print(currency_rate_list)
 
     logger.info("Функция filtered_card_data вызвана")
-    card_data = transactions.groupby(by="Номер карты").agg("Сумма платежа").sum().to_dict()
+
+    card_data = (
+        transactions.loc[transactions["Сумма платежа"] < 0]
+        .groupby(by="Номер карты")
+        .agg("Сумма платежа")
+        .sum()
+        .to_dict()
+    )
+
     output_data = []
     for card_number, total_spent in card_data.items():
         output_data.append(
-            {"last_digits": card_number, "total_spent": total_spent, "cashback": round(total_spent / 100, 2)}
+            {"last_digits": card_number, "total_spent": abs(total_spent), "cashback": abs(round(total_spent / 100, 2))}
         )
 
     return output_data
@@ -82,9 +90,7 @@ def get_greeting() -> str:
         return "Доброе утро"
     if 12 <= hour < 16:
         return "Добрый день"
-    if 16 <= hour < 23:
-        return "Добрый вечер"
-    return "Добрый день"
+    return "Добрый вечер"
 
 
 def get_main_page_data(

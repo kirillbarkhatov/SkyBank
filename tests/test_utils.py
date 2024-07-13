@@ -40,8 +40,8 @@ def test_get_transactions_from_xls(mock_read_excel, dict_for_pd_as_xls, dict_for
         ("21.01.2024", datetime.datetime.strptime("21.01.2024", "%d.%m.%Y")),
         ("21.01.2024 11:11:12", datetime.datetime.strptime("21.01.2024 11:11:12", "%d.%m.%Y %H:%M:%S")),
         ("2024-01-21 11:11:12", datetime.datetime.strptime("2024-01-21 11:11:12", "%Y-%m-%d %H:%M:%S")),
-        ("2024-01", datetime.datetime.strptime("2024-01", "%Y-%m"))
-    ]
+        ("2024-01", datetime.datetime.strptime("2024-01", "%Y-%m")),
+    ],
 )
 def test_date_converter(input_date, output_date):
     assert date_converter(input_date) == output_date
@@ -51,7 +51,8 @@ def test_date_converter(input_date, output_date):
 
 
 def test_get_user_settings():
-    m = mock_open(read_data=""" 
+    m = mock_open(
+        read_data=""" 
         {
             "user_currencies": ["USD", "EUR"],
             "user_stocks": ["AAPL", "AMZN", "GOOGL", "MSFT", "TSLA"]
