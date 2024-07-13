@@ -23,8 +23,8 @@ def get_current_month_data(transactions: pd.DataFrame, date: str) -> pd.DataFram
 
     logger.info(f"Функция get_transactions_from_xls вызвана с датой {date}")
     end_date = date_converter(date)
-    end_date = end_date.replace(hour=0, minute=0, second=0, microsecond=0) + dt.timedelta(days=1)
     start_date = end_date.replace(day=1)
+    end_date = end_date.replace(hour=0, minute=0, second=0, microsecond=0) + dt.timedelta(days=1)
     month_transactions = transactions.loc[
         (transactions["Дата операции"] <= end_date) & (transactions["Дата операции"] >= start_date)
     ]
