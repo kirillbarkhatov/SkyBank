@@ -40,48 +40,45 @@ def date_converter(date: str) -> datetime:
     try:
         date_dt = datetime.datetime.strptime(date, "%d.%m.%Y")
         logger.info(f"Дата в формате %d.%m.%Y успешно получена")
-        return np.datetime64(date_dt)
+        return date_dt
 
-    except Exception:
+    except (NameError, TypeError, ValueError):
         pass
 
     try:
         date_dt = datetime.datetime.strptime(date, "%d.%m.%Y %H:%M:%S")
-        logger.info(f"Дата в формате %d.%m.%Y успешно получена")
-        return np.datetime64(date_dt)
+        logger.info(f"Дата в формате %d.%m.%Y %H:%M:%S успешно получена")
+        return date_dt
 
-    except Exception:
+    except (NameError, TypeError, ValueError):
         pass
 
     try:
         date_dt = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
-        logger.info(f"Дата в формате %d.%m.%Y успешно получена")
-        return np.datetime64(date_dt)
+        logger.info(f"Дата в формате %Y-%m-%d %H:%M:%S успешно получена")
+        return date_dt
 
-    except Exception:
+    except (NameError, TypeError, ValueError):
         pass
 
     try:
         date_dt = datetime.datetime.strptime(date, "%Y-%m")
-        logger.info(f"Дата в формате %d.%m.%Y успешно получена")
-        return np.datetime64(date_dt)
+        logger.info(f"Дата в формате %Y-%m успешно получена")
+        return date_dt
 
-    except Exception:
+    except (NameError, TypeError, ValueError):
         pass
 
+    logger.error("Неверный формат даты")
     raise Exception("Неверный формат даты")
 
 
 def get_user_settings(path: str = "user_settings.json") -> tuple:
     """ Возвращает список валют и список акций из json с настройками пользователя"""
 
+    logger.info(f"Вызвана функция получения настроек пользователя из {path}")
     with open(path) as file:
         user_settings = json.load(file)
+        logger.info(f"Успешно получены настройки пользователя")
     return user_settings["user_currencies"], user_settings["user_stocks"]
 
-
-if __name__ in "__main__":
-#     get_transactions_from_csv(Path.cwd().parent.joinpath("data", "transactions.csv"))
-    get_transactions_from_xls()
-    print(date_converter("2023-11"))
-    # print(get_user_settings())
