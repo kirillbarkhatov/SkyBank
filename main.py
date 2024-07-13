@@ -1,7 +1,7 @@
 from src.external_api import currency_rate, stocks_rate
 from src.reports import spending_by_category
 
-# from src.services import get_cashback_by_category
+from src.services import get_cashback_by_category
 from src.utils import date_converter, get_transactions_from_xls, get_user_settings
 from src.views import get_main_page_data, filtered_top_five_transactions, filtered_card_data
 import pandas as pd
@@ -57,4 +57,4 @@ df = pd.DataFrame(
         "Сумма операции с округлением": {0: 160.89, 1: 64.0, 2: 118.12, 3: 78.05, 4: 564.0},
     }
 )
-print(filtered_card_data(df))
+print(spending_by_category(df, "Супермаркеты", "31.12.2021"))

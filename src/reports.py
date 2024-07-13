@@ -1,3 +1,4 @@
+import datetime
 import datetime as dt
 import logging
 from functools import wraps
@@ -45,7 +46,7 @@ def spending_by_category(transactions: pd.DataFrame, category: str, date: str | 
         end_date = dt.datetime.now()
     else:
         end_date = date_converter(date)
-    start_date = end_date.replace(month=((end_date.month + 8) % 12 + 1), hour=0, minute=0, second=0, microsecond=0)
+    start_date = end_date.replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=91)
     transactions_by_category = transactions.loc[
         (transactions["Дата операции"] <= end_date)
         & (transactions["Дата операции"] >= start_date)
