@@ -1,5 +1,6 @@
-import os
 import logging
+import os
+
 import requests
 from dotenv import load_dotenv
 
@@ -11,11 +12,11 @@ formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s: %(message)s")
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
-logger.info(f"Получение данных переменного окружения...")
+logger.info("Получение данных переменного окружения...")
 load_dotenv()
 EXCHANGE_RATE_API_KEY = os.getenv("EXCHANGE_RATE_API_KEY")
 STOCKS_API_KEY = os.getenv("STOCKS_API_KEY")
-logger.info(f"Данные переменного окружения получены")
+logger.info("Данные переменного окружения получены")
 
 
 def currency_rate(currencies: list) -> list[dict]:
@@ -55,4 +56,3 @@ def stocks_rate(stocks: list) -> list[dict]:
         response_data = response.json()
         stocks_rates.append({"stock": stock, "price": round(float(response_data["Global Quote"]["05. price"]), 2)})
     return stocks_rates
-

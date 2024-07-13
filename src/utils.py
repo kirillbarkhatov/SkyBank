@@ -1,11 +1,8 @@
+import datetime
 import json
 import logging
-import datetime
 
 import pandas as pd
-import numpy as np
-from pathlib import Path
-
 
 # Настройки логгирования
 logger = logging.getLogger(__name__)
@@ -33,13 +30,13 @@ def get_transactions_from_xls(file_path: str = "data/operations.xls") -> pd.Data
         return []
 
 
-def date_converter(date: str) -> datetime:
+def date_converter(date: str) -> datetime.datetime:
     """Функция конвертации даты, переданной строкой, в формат datetime"""
 
     logger.info(f"Вызвана функция распознавания и конвертации даты {date}")
     try:
         date_dt = datetime.datetime.strptime(date, "%d.%m.%Y")
-        logger.info(f"Дата в формате %d.%m.%Y успешно получена")
+        logger.info("Дата в формате %d.%m.%Y успешно получена")
         return date_dt
 
     except (NameError, TypeError, ValueError):
@@ -47,7 +44,7 @@ def date_converter(date: str) -> datetime:
 
     try:
         date_dt = datetime.datetime.strptime(date, "%d.%m.%Y %H:%M:%S")
-        logger.info(f"Дата в формате %d.%m.%Y %H:%M:%S успешно получена")
+        logger.info("Дата в формате %d.%m.%Y %H:%M:%S успешно получена")
         return date_dt
 
     except (NameError, TypeError, ValueError):
@@ -55,7 +52,7 @@ def date_converter(date: str) -> datetime:
 
     try:
         date_dt = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
-        logger.info(f"Дата в формате %Y-%m-%d %H:%M:%S успешно получена")
+        logger.info("Дата в формате %Y-%m-%d %H:%M:%S успешно получена")
         return date_dt
 
     except (NameError, TypeError, ValueError):
@@ -63,7 +60,7 @@ def date_converter(date: str) -> datetime:
 
     try:
         date_dt = datetime.datetime.strptime(date, "%Y-%m")
-        logger.info(f"Дата в формате %Y-%m успешно получена")
+        logger.info("Дата в формате %Y-%m успешно получена")
         return date_dt
 
     except (NameError, TypeError, ValueError):
@@ -74,11 +71,10 @@ def date_converter(date: str) -> datetime:
 
 
 def get_user_settings(path: str = "user_settings.json") -> tuple:
-    """ Возвращает список валют и список акций из json с настройками пользователя"""
+    """Возвращает список валют и список акций из json с настройками пользователя"""
 
     logger.info(f"Вызвана функция получения настроек пользователя из {path}")
     with open(path) as file:
         user_settings = json.load(file)
-        logger.info(f"Успешно получены настройки пользователя")
+        logger.info("Успешно получены настройки пользователя")
     return user_settings["user_currencies"], user_settings["user_stocks"]
-
