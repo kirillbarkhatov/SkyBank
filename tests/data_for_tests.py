@@ -1,6 +1,5 @@
 from pandas import Timestamp
 
-
 dict_raw = {
     "Дата операции": {
         0: "31.12.2021 16:44:00",

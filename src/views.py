@@ -5,7 +5,7 @@ import logging
 import pandas as pd
 
 from src.external_api import currency_rate, stocks_rate
-from src.utils import date_converter, get_transactions_from_xls
+from src.utils import date_converter
 
 # Настройки логгирования
 logger = logging.getLogger(__name__)
@@ -94,15 +94,13 @@ def get_greeting() -> str:
 
 
 def get_main_page_data(
-    transactions: pd.DataFrame, date_time: str, user_currencies: list, user_stocks: list
+    transactions: pd.DataFrame | list, date_time: str, user_currencies: list, user_stocks: list
 ) -> str:
     """Функция, для страницы Главная, возвращающая приветствие, данные по картам за этот месяц,
     топ 5 операций за месяц, курсы валют и акций
     """
 
-    logger.info(
-        f"Функция get_main_page_data вызвана с параметрами {date_time}, {user_currencies}, {user_stocks}"
-    )
+    logger.info(f"Функция get_main_page_data вызвана с параметрами {date_time}, {user_currencies}, {user_stocks}")
     greeting = get_greeting()
     if isinstance(transactions, list):
         raise Exception("Список транзакций пуст")

@@ -1,10 +1,11 @@
+import datetime
+from unittest.mock import mock_open, patch
+
 import pandas as pd
 import pytest
-from src.utils import get_transactions_from_xls, date_converter, get_user_settings
-from unittest.mock import patch, mock_open
-from pandas import Timestamp
-import datetime
-from tests.data_for_tests import dict_raw, dict_prepared
+
+from src.utils import date_converter, get_transactions_from_xls, get_user_settings
+from tests.data_for_tests import dict_prepared, dict_raw
 
 
 @pytest.fixture
@@ -29,7 +30,7 @@ def test_get_transactions_from_xls(mock_read_excel, dict_for_pd_as_xls, dict_for
     m = mock_open()
     mock_read_excel.return_value = pd.DataFrame(dict_for_pd_as_xls)
     result = pd.DataFrame(dict_for_pd_for_working)
-    with patch("builtins.open", m) as mocked_open:
+    with patch("builtins.open", m):
         assert result.equals(get_transactions_from_xls("test"))
         mock_read_excel.assert_called_once_with("test")
 
@@ -52,12 +53,12 @@ def test_date_converter(input_date, output_date):
 
 def test_get_user_settings():
     m = mock_open(
-        read_data=""" 
+        read_data="""
         {
             "user_currencies": ["USD", "EUR"],
             "user_stocks": ["AAPL", "AMZN", "GOOGL", "MSFT", "TSLA"]
         }"""
     )
     get_user_settings()
-    with patch("builtins.open", m) as mocked_open:
+    with patch("builtins.open", m):
         assert get_user_settings("test") == (["USD", "EUR"], ["AAPL", "AMZN", "GOOGL", "MSFT", "TSLA"])

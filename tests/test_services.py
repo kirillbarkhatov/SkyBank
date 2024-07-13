@@ -1,7 +1,8 @@
+import pandas as pd
 import pytest
+
 from src.services import get_cashback_by_category
 from tests.data_for_tests import dict_prepared
-import pandas as pd
 
 
 @pytest.fixture
